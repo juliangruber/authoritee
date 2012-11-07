@@ -28,8 +28,8 @@ var http = require('http')
 var player = new Model()
 var ps = player.createStream()
 
-player.on('cords', function (cords, last) {
-  if (cords.x - last.x > 10) cords.x = last.x + 10
+player.on('cords', function (new, last, t) {
+  if (new.x - last.x > t) new.x = last.x + t
 })
 
 // Replicate
