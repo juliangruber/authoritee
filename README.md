@@ -28,8 +28,12 @@ var http = require('http')
 var player = new Model()
 var ps = player.createStream()
 
-player.on('cords', function (new, last, t) {
-  if (new.x - last.x > t) new.x = last.x + t
+// Move max. one length entity per second
+player.on('cords', function (cords, last, t) {
+  var dist = Math.sqrt(Math.pow(cords.x - last.x, 2) + Math.pow(cords.y - last.y, 2))
+  if (dist > t / 1000) {
+    cords = last
+  }
 })
 
 // Replicate
