@@ -13,6 +13,15 @@ var player = new Model()
 var ps = player.createStream()
 
 player.set('cords', { x : 10, y : 35 })
+player.get('cords') == { x : 10, y : 35 }
+
+// after 1 sec
+player.set('cords', { x : 11, y : 35 })
+player.get('cords') == { x : 11, y : 35 }
+
+// after 1 sec
+player.set('cords', { x : 30, y : 59 }) // cheater
+player.get('cords') == { x : 11, y : 35 }
 
 // Replicate
 ps.pipe(shoe('/stream')).pipe(ps)
