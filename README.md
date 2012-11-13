@@ -1,6 +1,6 @@
 # authoritee
 
-restepk my authoritative model!
+restepk my authoritee!
 
 Add authoritative nodes to your net of scuttlebutt models.
 
