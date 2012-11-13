@@ -19,9 +19,7 @@ var player = new Authoritee()
 // Here relative is better
 player.onRel('cords', function (dcords, dt) {
   var delta = Math.sqrt(dcords.x * dcords.x, dcords.y * dcords.y)
-
   if (delta > dt / 1000 || delta > 1) dcords.x = dcords.y = 0
-  
   return dcords
 })
 
