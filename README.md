@@ -20,12 +20,9 @@ On the server:
 var Model = require('authorative-model')
 
 var player = new Model()
-```
-There are two modes: relative and absolute.
 
-In relative mode (not called when initial coordinates are set):
-
-```js
+// There are two modes: relative and absolute. For this example relative mode is
+// easier
 player.onRel('cords', function (dcords, dt) {
   var delta = Math.sqrt(dcords.x * dcords.x, dcords.y * dcords.y)
 
@@ -34,25 +31,7 @@ player.onRel('cords', function (dcords, dt) {
   return dcords
 })
 
-```
-In absolute mode:
-
-```js
-player.onAbs('cords', function (cords1, cords0, dt) {
-  if (!cords0) return
-
-  var dx = cords1.x - cords0.x
-  var dy = cords1.y - cords0.y
-  var delta = Math.sqrt(dx * dx + dy * dy)
-  
-  if (delta > dt / 1000 || delta > 1) return cords0
-  return cords1
-})
-```
-
-Now replicate with the client or other servers
-
-```js
+// Replicate
 var ps = player.createStream()
 
 var http = require('http')
