@@ -9,7 +9,7 @@ Add authoritative nodes to your net of scuttlebutt models.
 In a game you might want to limit players' movements to no more than 1 length
 entity per second, to prevent cheating. 
 
-On the server:
+On the server use authoritee:
 
 ```javascript
 var Authoritee = require('authoritee')
@@ -38,14 +38,15 @@ var sock = shoe(function (stream) {
 })
 sock.install(server, '/stream')
 ```
-On the client:
+
+On the client just use scuttlebutt:
 
 ```javascript
-var Authoritee = require('authoritee')
-var player = new Authoritee()
+var Model = require('scuttlebutt/model')
+var player = new Model()
 
-player.on('cords', function (cords) {
-  moveTo(cords.x, cords.y)
+player.on('update', function (key, value) {
+  if (key == 'cords') moveTo(value.x, value.y)
 })
 
 // Just apply updates as you wish, the server will update your model
@@ -109,7 +110,7 @@ The `change` object/number that `cb` returns will be applied on the curent
 
 If no listeners are registered for changes to `key`, all changes are accepted.
 
-### Model#on(key, cb)
+### Model#on('update', function (key, value, source))
 
 Executes `cb` whenever the value stored at `key` changes.
 
