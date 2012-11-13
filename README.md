@@ -44,6 +44,10 @@ On the client:
 var Authoritee = require('authoritee')
 var player = new Authoritee()
 
+player.on('cords', function (cords) {
+  moveTo(cords.x, cords.y)
+})
+
 // Just apply updates as you wish, the server will update your model
 // if you did something wrong
 
