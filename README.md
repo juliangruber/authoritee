@@ -1,28 +1,22 @@
-Names:
+# authoritee
 
-* authoritive-model
-* authoritee
+restepk my authoritative model!
 
-# authorative-model
-
-restepk my authoritee!
+Add authoritative nodes to your net of scuttlebutt models.
 
 ## Usage
 
 In a game you might want to limit players' movements to no more than 1 length
-entity per second, to prevent cheating. Still you want to replicate data
-between client and server in a easy distributed way, like with @dominictarr's
-scuttlebutt. This is how you would do it with an `authorative-model`.
+entity per second, to prevent cheating. 
 
 On the server:
 
 ```javascript
-var Model = require('authorative-model')
+var Authoritee = require('authoritee')
+var player = new Authoritee()
 
-var player = new Model()
-
-// There are two modes: relative and absolute. For this example relative mode is
-// easier
+// There are two modes: relative and absolute.
+// Here relative is better
 player.onRel('cords', function (dcords, dt) {
   var delta = Math.sqrt(dcords.x * dcords.x, dcords.y * dcords.y)
 
@@ -47,8 +41,8 @@ sock.install(server, '/stream')
 On the client:
 
 ```javascript
-var Model = require('authorative-model')
-var player = new Model()
+var Authoritee = require('authoritee')
+var player = new Authoritee()
 
 // Just apply updates as you wish, the server will update your model
 // if you did something wrong
@@ -72,9 +66,9 @@ ps.pipe(shoe('/stream')).pipe(ps)
 
 ## API
 
-### Model()
+### Authoritee()
 
-create a new `authorative-model`.
+create a new `authoratee` model.
 
 ### Model#set(key, value)
 
@@ -117,12 +111,12 @@ Executes `cb` whenever the value stored at `key` changes.
 
 ### Model#createStream()
 
-create a duplex stream for replicating multiple `authorative-models`
+create a duplex stream for replicating with other scuttlebutt / authoritee nodes
 
 ## Installation
 
 ```bash
-npm install authoritive-model
+npm install autoritee
 ```
 
 ## License
