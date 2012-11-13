@@ -1,58 +1,181 @@
+Names:
+
+* authoritive-model
+* authoritee
 
 # authorative-model
 
+restepk my authoritee!
+
 ## Usage
+
+In a game you might want to limit players' movements to no more than 1 length
+entity per second, to prevent cheating. Still you want to replicate data
+between client and server in a easy distributed way, like with @dominictarr's
+scuttlebutt. This is how you would do it with an `authorative-model`.
 
 On the server:
 
 ```javascript
 var Model = require('authorative-model')
-var shoe = require('shoe')
-var http = require('http')
 
 var player = new Model()
-var ps = player.createStream()
+```
+There are two modes: relative and absolute.
 
-// Refuse movements of more then one length entity per second
-player.on('cords', function (cords1, cords0, t) {
+In relative mode (not called when initial coordinates are set):
+
+```js
+player.onRel('cords', function (dcords, dt) {
+  // calculate movement
+  var delta = Math.sqrt(dcords.x * dcords.x, dcords.y * dcords.y)
+
+  // reject if cheated
+  if (delta > dt / 1000 || delta > 1) dcords.x = dcords.y = 0
+  
+  // apply results
+  return dcords
+})
+
+```
+In absolute mode:
+
+```js
+player.onAbs('cords', function (cords1, cords0, dt) {
   // allow initial values
   if (!cords0) return
 
-  var dist = Math.sqrt(Math.pow(cords1.x - cords0.x, 2) + Math.pow(cords1.y - cords0.y, 2))
+  // calculate movement
+  var dx = cords1.x - cords0.x
+  var dy = cords1.y - cords0.y
+  var delta = Math.sqrt(dx * dx + dy * dy)
   
-  // refuse if wrong
-  if (dist > t / 1000) cords2 = cords1
+  // reject if cheated
+  if (delta > dt / 1000 || delta > 1) return cords0
+  
+  // all good!
+  return cords1
 })
+```
 
-// Replicate
+Now replicate with the client or other servers
+
+```js
+var ps = player.createStream()
+
+// standard http server
+var http = require('http')
 var server = http.createServer()
 server.listen(3000)
 
+// websockets
+var shoe = require('shoe')
 var sock = shoe(function (stream) {
   ps.pipe(stream).pipe(ps)
 })
-
 sock.install(server, '/stream')
 ```
 On the client:
 
 ```javascript
 var Model = require('authorative-model')
-var shoe = require('shoe')
-
 var player = new Model()
-var ps = player.createStream()
+
+// Just apply updates as you wish, the server will update your model
+// if you did something wrong
 
 player.set('cords', { x : 10, y : 35 })
-// autorative model replicates initial value
+// authorative model replicates good initial cords
 
+// after 1 second
 player.set('cords', { x : 11, y : 35 })
-// authorative model replicates data unchanged
+// authorative model replicates good cords
 
-player.set('cords', { x : 30, y : 59 }) // cheater
-// authorative model replicates data changed and corrects cheater
+// now a cheat
+player.set('cords', { x : 30, y : 59 })
+// authorative model replicates corrected cords and corrects the client
 
 // Replicate
+var ps = player.createStream()
+var shoe = require('shoe')
 ps.pipe(shoe('/stream')).pipe(ps)
 ```
 
+## API
+
+### Model()
+
+create a new `authorative-model`.
+
+### Model#set(key, value)
+
+store `value` at `key` inside the model.
+
+### Model#get(key)
+
+get the `value` associated with `key`.
+
+### Model#onAbs(key, cb)
+
+Executes `cb` whenever a node tries to change the `value` stored at `key` with
+the following arguments:
+
+* the proposed new value
+* the current value
+* the time in miliseconds that passed since the last valid update
+
+The value that `cb` returns will be stored at `key`. __You need to do this
+even if you just accept__.
+
+If no listeners are registered for changes to `key`, all changes are accepted.
+
+### Model#onRel(key, cb)
+
+Executes `cb` whenever a node tries to change the value stored at `key` with
+the following arguments:
+
+* the calculate change of value, supporting numbers and numbers in objects
+* the time in miliseconds that passed since the last valid update
+
+The `change` object/number that `cb` returns will be applied on the curent
+`value`.
+
+If no listeners are registered for changes to `key`, all changes are accepted.
+
+### Model#on(key, cb)
+
+Executes `cb` whenever the value stored at `key` changes.
+
+### Model#createStream()
+
+create a duplex stream for replicating multiple `authorative-models`
+
+## Installation
+
+```bash
+npm install authoritive-model
+```
+
+## License
+
+(MIT)
+
+Copyright (c) 2012 &lt;julian@juliangruber.com&gt;
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
