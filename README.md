@@ -27,13 +27,10 @@ In relative mode (not called when initial coordinates are set):
 
 ```js
 player.onRel('cords', function (dcords, dt) {
-  // calculate movement
   var delta = Math.sqrt(dcords.x * dcords.x, dcords.y * dcords.y)
 
-  // reject if cheated
   if (delta > dt / 1000 || delta > 1) dcords.x = dcords.y = 0
   
-  // apply results
   return dcords
 })
 
@@ -42,18 +39,13 @@ In absolute mode:
 
 ```js
 player.onAbs('cords', function (cords1, cords0, dt) {
-  // allow initial values
   if (!cords0) return
 
-  // calculate movement
   var dx = cords1.x - cords0.x
   var dy = cords1.y - cords0.y
   var delta = Math.sqrt(dx * dx + dy * dy)
   
-  // reject if cheated
   if (delta > dt / 1000 || delta > 1) return cords0
-  
-  // all good!
   return cords1
 })
 ```
@@ -63,12 +55,10 @@ Now replicate with the client or other servers
 ```js
 var ps = player.createStream()
 
-// standard http server
 var http = require('http')
 var server = http.createServer()
 server.listen(3000)
 
-// websockets
 var shoe = require('shoe')
 var sock = shoe(function (stream) {
   ps.pipe(stream).pipe(ps)
