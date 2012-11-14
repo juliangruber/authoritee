@@ -9,6 +9,7 @@ function Authoritee () {
   Model.call(this)
   this.abs = {}
   this.rel = {}
+  this.last = {}
 }
 
 inherits(Authoritee, Model)
@@ -33,7 +34,15 @@ Authoritee.prototype.applyUpdate = function (update) {
   var key = update[0]
   var val = update[1]
 
-  if (this.abs[key]) update = this.abs[key](update)
-  if (this.rel[key]) update = this.rel[key](update)
+  var now = Date.now()
+
+  if (this.abs[key]) {
+    update[1] = this.abs[key](val, this.get(key), now - this.last[key])
+  } else if (this.rel[key]) {
+    update[1] = this.rel[key](update)
+  }
+
+  this.last[key] = now
+
   return applyUpdate.call(this, update)
 }

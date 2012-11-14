@@ -2,17 +2,16 @@ var test = require('./util').test
 var mesh = require('./util').mesh
 var assert = require('assert')
 
-test('absolute', function () {
+test('relative', function () {
   var m = mesh()
 
   assert(m.authoritee.onAbs instanceof Function, '#onAbs')
 
-  m.authoritee.onAbs('cords', function (cords1, cords0, dt) {
-    if (!cords0) return cords1
-    var dx = cords1.x - cords0.x
-    var dy = cords1.y - cords0.y
-    if (Math.sqrt(dx * dx, dy * dy) > 1) return cords0
-    return cords1
+  m.authoritee.onRel('cords', function (dcords, dt) {
+    if (Math.sqrt(dcords.x * dcords.x, dcords.y * dcords.y) > 1) {
+      dcords.x = dcords.y = 0
+    }
+    return dcords
   })
 
   var updates = 0
