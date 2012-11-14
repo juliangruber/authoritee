@@ -7,20 +7,20 @@ function Authoritee () {
   if (!(this instanceof Authoritee)) return new Authoritee()
 
   Model.call(this)
-  this.abs = {}
+  this.checks = {}
   this.last = {}
 }
 
 inherits(Authoritee, Model)
 
 Authoritee.prototype.onAbs = function (key, fn) {
-  if (this.abs[key]) throw new Exception('Only one listener per key.')
-  this.abs[key] = fn
+  if (this.checks[key]) throw new Exception('Only one listener per key.')
+  this.checks[key] = fn
 }
 
 Authoritee.prototype.onRel = function (key, fn) {
-  if (this.abs[key]) throw new Exception('Only one listener per key.')
-  this.abs[key] = function (changed, current, dt) {
+  if (this.checks[key]) throw new Exception('Only one listener per key.')
+  this.checks[key] = function (changed, current, dt) {
     if (!current) return changed
     var delta = getDelta(current, changed)
     delta = fn(delta, dt)
@@ -37,7 +37,7 @@ Authoritee.prototype.applyUpdate = function (update) {
   var now = Date.now()
   var dt = now - this.last[key]
 
-  if (this.abs[key]) update[1] = this.abs[key](changed, this.get(key), dt)
+  if (this.checks[key]) update[1] = this.checks[key](changed, this.get(key), dt)
 
   this.last[key] = now
   return applyUpdate.call(this, update)
