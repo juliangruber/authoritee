@@ -1,0 +1,30 @@
+{
+  "name": "authoritee",
+  "version": "0.0.0",
+  "description": "Authoritative models for scuttlebutt meshs",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "set -e; for test in test/*.js; do node $test; done"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/juliangruber/authoritee.git"
+  },
+  "keywords": [
+    "scuttlebutt",
+    "distributed",
+    "authoritative",
+    "authority"
+  ],
+  "dependencies": {
+    "scuttlebutt": "~4.1.1"
+  },
+  "devDependencies": {
+    "macgyver": "~1.6.3"
+  },
+  "author": "Julian Gruber <julian@juliangruber.com>",
+  "license": "MIT"
+}
