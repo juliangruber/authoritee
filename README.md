@@ -97,24 +97,27 @@ If no listeners are registered for changes to `key`, all changes are accepted.
 
 ### Model#onRel(key, cb)
 
-Executes `cb` whenever a node tries to change the value stored at `key` with
-the following arguments:
+A convenience wrapper around `Model#onAbs(key, cb)`
+
+The following arguments are passed:
 
 * the calculate change of value, supporting numbers and numbers in objects
 * the time in miliseconds that passed since the last valid update
 
-The `change` object/number that `cb` returns will be applied on the curent
+The `change` object/number that `cb` returns will be applied to the curent
 `value`.
 
 If no listeners are registered for changes to `key`, all changes are accepted.
 
 ### Model#on('update', function (key, value, source))
 
-Executes `cb` whenever the value stored at `key` changes.
+see dominictarr/scuttlebutt's README.
 
 ### Model#createStream()
 
 create a duplex stream for replicating with other scuttlebutt / authoritee nodes
+
+see dominictarr/scuttlebutt's README.
 
 ## Installation
 
