@@ -4,9 +4,8 @@ var Authoritee = require('../')
 var util = module.exports = {}
 
 util.test = function (name, fn) {
-  console.log('O', name)
+  console.log('#', name)
   fn()
-  console.log('X', 'passed')
 }
 
 util.mesh = function () {

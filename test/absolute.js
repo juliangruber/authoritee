@@ -20,8 +20,6 @@ test('absolute', function () {
     if (key != 'cords') return
 
     updates++
-    console.log('update received', val)
-
     assert(val.x == 51 && val.y == 50, 'corrected value')
   }) 
 
