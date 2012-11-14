@@ -40,7 +40,7 @@ Authoritee.prototype.applyUpdate = function (update) {
   if (this.abs[key]) {
     update[1] = this.abs[key](changed, this.get(key), dt)
   } else if (this.rel[key] && typeof this.get(key) != 'undefined') {
-    var delta = getDelta(changed, this.get(key))
+    var delta = getDelta(this.get(key), changed)
     delta = this.rel[key](delta, dt)
     update[1] = applyDelta(this.get(key), delta)
   }
@@ -53,23 +53,25 @@ Authoritee.prototype.applyUpdate = function (update) {
  * Delta utility functions
  */
 
-function getDelta (changed, current) {
+function getDelta (current, changed) {
   if (typeof current == 'number') return changed - current
 
   var delta = {}
   Object.keys(changed).forEach(function (k) {
+    if (typeof current[k] != 'number') return
     delta[k] = changed[k] - current[k]
   })
 
   return delta
 }
 
-function applyDelta (obj, delta) {
-  if (typeof obj == 'number') return obj + delta
+function applyDelta (current, delta) {
+  if (typeof current == 'number') return current + delta
 
   var changed = {}
   Object.keys(delta).forEach(function (k) {
-    changed[k] = obj[k] + delta[k]
+    if (typeof current[k] != 'number') return
+    changed[k] = current[k] + delta[k]
   })
 
   return changed
