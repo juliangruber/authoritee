@@ -8,24 +8,24 @@ function Authoritee () {
 
   Model.call(this)
   this.abs = {}
-  this.rel = {}
   this.last = {}
 }
 
 inherits(Authoritee, Model)
 
 Authoritee.prototype.onAbs = function (key, fn) {
-  if (this.abs[key] || this.rel[key]) {
-    throw new Exception('Only one listener per key.')
-  }
+  if (this.abs[key]) throw new Exception('Only one listener per key.')
   this.abs[key] = fn
 }
 
 Authoritee.prototype.onRel = function (key, fn) {
-  if (this.abs[key] || this.rel[key]) {
-    throw new Exception('Only one listener per key.')
+  if (this.abs[key]) throw new Exception('Only one listener per key.')
+  this.abs[key] = function (changed, current, dt) {
+    if (!current) return changed
+    var delta = getDelta(current, changed)
+    delta = fn(delta, dt)
+    return applyDelta(current, delta)
   }
-  this.rel[key] = fn
 }
 
 var applyUpdate = Authoritee.prototype.applyUpdate
@@ -37,13 +37,7 @@ Authoritee.prototype.applyUpdate = function (update) {
   var now = Date.now()
   var dt = now - this.last[key]
 
-  if (this.abs[key]) {
-    update[1] = this.abs[key](changed, this.get(key), dt)
-  } else if (this.rel[key] && typeof this.get(key) != 'undefined') {
-    var delta = getDelta(this.get(key), changed)
-    delta = this.rel[key](delta, dt)
-    update[1] = applyDelta(this.get(key), delta)
-  }
+  if (this.abs[key]) update[1] = this.abs[key](changed, this.get(key), dt)
 
   this.last[key] = now
   return applyUpdate.call(this, update)
