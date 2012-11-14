@@ -1,7 +1,7 @@
 {
   "name": "authoritee",
-  "version": "0.0.0",
-  "description": "Authoritative models for scuttlebutt meshs",
+  "version": "0.0.1",
+  "description": "Authoritative models for scuttlebutt meshes",
   "main": "index.js",
   "directories": {
     "test": "test"
@@ -21,9 +21,6 @@
   ],
   "dependencies": {
     "scuttlebutt": "~4.1.1"
-  },
-  "devDependencies": {
-    "macgyver": "~1.6.3"
   },
   "author": "Julian Gruber <julian@juliangruber.com>",
   "license": "MIT"
