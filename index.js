@@ -31,13 +31,13 @@ Authoritee.prototype.onRel = function (key, fn) {
 var applyUpdate = Authoritee.prototype.applyUpdate
 
 Authoritee.prototype.applyUpdate = function (update) {
-  var key = update[0]
-  var changed = update[1]
-
+  var _update = update[0]
+  var key = _update[0]
+  var changed = _update[1]
   var now = Date.now()
   var dt = now - this.last[key]
 
-  if (this.checks[key]) update[1] = this.checks[key](changed, this.get(key), dt)
+  if (this.checks[key]) _update[1] = this.checks[key](changed, this.get(key), dt)
 
   this.last[key] = now
   return applyUpdate.call(this, update)
