@@ -4,6 +4,8 @@ restepk my authoritee!
 
 Add authoritative nodes to your net of scuttlebutt models.
 
+[![build status](https://secure.travis-ci.org/juliangruber/authoritee.png)](http://travis-ci.org/juliangruber/authoritee)
+
 ## Usage
 
 In a game you might want to limit players' movements to no more than 1 length
