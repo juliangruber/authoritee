@@ -20,7 +20,7 @@
     "authority"
   ],
   "dependencies": {
-    "scuttlebutt": "~4.1.1"
+    "scuttlebutt": "~5.5.20"
   },
   "author": "Julian Gruber <julian@juliangruber.com>",
   "license": "MIT"
