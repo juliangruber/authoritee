@@ -15,7 +15,10 @@ test('relative', function () {
   })
 
   var updates = 0
-  m.modelC.on('update', function (key, val) {
+  m.modelC.on('update', function (change, timestamp, source) {
+    var key = change[0]
+    var val = change[1]
+    
     if (key != 'cords') return
 
     updates++
