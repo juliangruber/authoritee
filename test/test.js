@@ -10,3 +10,9 @@ test('constructor', function () {
 
   assert(Authoritee() instanceof Model, 'scuttlebutt model')
 })
+
+test('chainable', function () {
+  var auth = new Authoritee()
+  assert(auth.onAbs(), auth, 'chainable onAbs')
+  assert(auth.onRel(), auth, 'chainable onRel')
+})

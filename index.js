@@ -16,6 +16,7 @@ inherits(Authoritee, Model)
 Authoritee.prototype.onAbs = function (key, fn) {
   if (this.checks[key]) throw new Exception('Only one listener per key.')
   this.checks[key] = fn
+  return this
 }
 
 Authoritee.prototype.onRel = function (key, fn) {
@@ -26,6 +27,7 @@ Authoritee.prototype.onRel = function (key, fn) {
     delta = fn(delta, dt)
     return applyDelta(current, delta)
   }
+  return this
 }
 
 var applyUpdate = Authoritee.prototype.applyUpdate

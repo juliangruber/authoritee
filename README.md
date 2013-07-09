@@ -97,6 +97,8 @@ even if you just accept__.
 
 If no listeners are registered for changes to `key`, all changes are accepted.
 
+Returns the model.
+
 ### Model#onRel(key, cb)
 
 A convenience wrapper around `Model#onAbs(key, cb)`
@@ -110,6 +112,8 @@ The `change` object/number that `cb` returns will be applied to the curent
 `value`.
 
 If no listeners are registered for changes to `key`, all changes are accepted.
+
+Returns the model.
 
 ### Model#on('update', function (key, value, source))
 
